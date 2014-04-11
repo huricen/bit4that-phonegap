@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>LatLon Distance Calculations</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	    <meta name="description" content="Demo project with jQuery">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">	
+		<style type="text/css">
+			/*if the button is clickable, then set it up*/
+
+			html {
+				text-align: center;
+			}
+
+			button {
+				background-color: green;
+				border: black;
+				font-size: 25px;
+			}
+
+		</style>
+	</head>
+
+	<body>
+    	
+    	Current Lat:
+    	<div class="currentLat">43.641125</div>    	
+    	<br>
+    	Current Lon:
+    	<div class="currentLon">-79.399957</div>
+		<br>
+		Destination Lat:
+		<br>
+		<div class="destLat">43.648981</div>
+		<br>
+		<br>
+		Destination Lon:
+		<br>
+		<div class="destLon">-79.39673</div>
+		<br>
+		<br>
+		Distance From Destination
+    	<div class="distance"></div>
+    	<br>
+    	Tolerance:
+    	<div class="tolerance">1</div>
+
+    	<br>
+		<button id="onoff" class="invisible">Pay</button>
+
+
+	</body>
+
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript">
+		jQuery(function(){
+			var lat1 = $("div.currentLat").html();   //current lat
+			var lon1 = $("div.currentLon").html();  //current lon
+			var lat2 = $("div.destLat").html();  //43.648981;   //from the DB lookup
+			var lon2 = $("div.destLon").html(); //-79.39673;   // from the DB lookup
+			var unit = "K";   //Kilometers
+
+			function distance(lat1, lon1, lat2, lon2, unit) {
+			    var radlat1 = Math.PI * lat1/180
+			    var radlat2 = Math.PI * lat2/180
+			    var radlon1 = Math.PI * lon1/180
+			    var radlon2 = Math.PI * lon2/180
+			    var theta = lon1-lon2
+			    var radtheta = Math.PI * theta/180
+			    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+			    dist = Math.acos(dist)
+			    dist = dist * 180/Math.PI
+			    dist = dist * 60 * 1.1515
+			    if (unit=="K") { dist = dist * 1.609344 }
+			    if (unit=="N") { dist = dist * 0.8684 }
+			    // console.log(dist) 
+			    return dist
+			};
+
+			// console.log($("div.distance").html());
+
+			$("div.distance").html(distance(lat1, lon1, lat2, lon2, unit));
+			
+			// var tolerance = 0.1 will be substituted below.
+			if ($("div.distance").html() < ($("div.tolerance").html())) {
+				$("button#onoff").removeClass("invisible");
+			};
+
+			$("button").click(function() {
+				alert("clicked!"); //put the bitcredits payment stuff in here
+			});
+
+		});
+	</script>
+	<!-- <script src="latLonDistanceFunction.js"></script> -->
+</html>
+
+
